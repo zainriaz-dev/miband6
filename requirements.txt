@@ -41,25 +41,44 @@ scikit-image>=0.20.0         # Advanced image processing algorithms
 # jupyter>=1.0.0             # Interactive notebooks for development
 
 # ============================================================================
-# INSTALLATION NOTES:
+# CROSS-PLATFORM INSTALLATION NOTES:
 # 
 # 1. TESSERACT OCR (REQUIRED):
 #    - Windows: Download from https://github.com/UB-Mannheim/tesseract/wiki
+#      Note: May require Microsoft Visual C++ Redistributable
 #    - macOS: brew install tesseract
-#    - Ubuntu: sudo apt install tesseract-ocr
+#      Note: May need "brew install libjpeg" if image issues occur
+#    - Linux: sudo apt install tesseract-ocr tesseract-ocr-eng
 #
 # 2. BASIC INSTALLATION:
 #    pip install -r requirements.txt
 #
-# 3. MINIMAL INSTALLATION (core features only):
+# 3. PLATFORM-SPECIFIC DEPENDENCIES:
+#    Windows:
+#      - May need Microsoft Visual C++ Redistributable for opencv-python
+#      - Download from: https://aka.ms/vs/17/release/vc_redist.x64.exe
+#    
+#    macOS:
+#      - If OpenCV issues: brew install opencv
+#      - If image format issues: brew install libjpeg libpng
+#    
+#    Linux (Ubuntu/Debian):
+#      - sudo apt install python3-dev libgl1-mesa-glx libglib2.0-0
+#      - For better camera support: sudo apt install libopencv-dev
+#
+# 4. MINIMAL INSTALLATION (core features only):
 #    pip install pytesseract pillow opencv-python numpy pandas watchdog tqdm
 #
-# 4. FULL INSTALLATION (all features):
+# 5. FULL INSTALLATION (all features):
 #    pip install -r requirements.txt
 #    pip install torch torchvision  # For GPU acceleration
 #
-# 5. FOR GPU ACCELERATION:
+# 6. FOR GPU ACCELERATION (OPTIONAL):
 #    - Install CUDA toolkit if you have NVIDIA GPU
 #    - Install PyTorch with CUDA support
 #    - Uncomment torch and torchvision lines above
+#
+# 7. ENVIRONMENT VARIABLES (OPTIONAL):
+#    - TESSERACT_CMD: Path to tesseract executable (auto-detected)
+#    - TESSDATA_PREFIX: Path to tessdata folder (usually auto-detected)
 # ============================================================================

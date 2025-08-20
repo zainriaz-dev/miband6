@@ -191,7 +191,7 @@ class TextCleaner:
 class ZeppLifeExtractor:
     """Main extractor class for Zepp Life health metrics"""
     
-    def __init__(self, debug: bool = False, visualize: bool = False):
+    def __init__(self, debug: bool = False, visualize: bool = True):
         self.debug = debug
         self.visualize = visualize
         
@@ -227,7 +227,12 @@ class ZeppLifeExtractor:
             # Draw debug visualization if requested
             if self.visualize:
                 debug_image = draw_debug_regions(image, regions)
-                debug_path = Path(image_path).with_suffix('.debug.png')
+                # Save to debug folder instead of original location
+                original_path = Path(image_path)
+                debug_dir = original_path.parent / "debug"
+                debug_dir.mkdir(exist_ok=True)
+                debug_filename = f"{original_path.stem}_debug.png"
+                debug_path = debug_dir / debug_filename
                 cv2.imwrite(str(debug_path), debug_image)
                 logger.info(f"Debug visualization saved: {debug_path}")
             
@@ -250,7 +255,11 @@ class ZeppLifeExtractor:
                     
                     # Save debug ROI if requested
                     if self.debug:
-                        roi_path = Path(image_path).parent / f"debug_{region_name}_roi.png"
+                        original_path = Path(image_path)
+                        debug_dir = original_path.parent / "debug"
+                        debug_dir.mkdir(exist_ok=True)
+                        roi_filename = f"{original_path.stem}_{region_name}_roi.png"
+                        roi_path = debug_dir / roi_filename
                         cv2.imwrite(str(roi_path), processed_roi)
                     
                     # Extract text using OCR

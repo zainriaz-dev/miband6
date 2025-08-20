@@ -134,42 +134,42 @@ class ZeppLifeRegionDetector:
     """Specific region detector for Zepp Life app screenshots"""
     
     def __init__(self):
-        # Define standard regions for Zepp Life interface based on annotated image
-        # Coordinates precisely extracted from user's annotated screenshot
+        # Define enhanced regions for Zepp Life interface based on user's annotated image
+        # Improved coordinates with better spacing and positioning
         self.standard_regions = {
             'heart_rate': Region(
                 name='heart_rate',
-                bbox=(63, 194, 145, 75),  # Green box - Heart Rate: 86 BPM
+                bbox=(60, 190, 150, 80),  # Green box - Heart Rate: 86 BPM
                 metric_type='heart_rate',
                 expected_format='number_with_unit'
             ),
             'stress': Region(
-                name='stress',
-                bbox=(94, 374, 110, 75),  # Blue box - Stress: 40
+                name='stress', 
+                bbox=(90, 370, 120, 80),  # Blue box - Stress: 40
                 metric_type='stress',
                 expected_format='number'
             ),
             'steps': Region(
                 name='steps',
-                bbox=(48, 684, 170, 85),  # Red box - Steps: 0
+                bbox=(45, 680, 175, 90),  # Red box - Steps: 0
                 metric_type='steps',
                 expected_format='number'
             ),
             'distance': Region(
                 name='distance',
-                bbox=(340, 590, 125, 75),  # Cyan box - Distance: 0.0 km
+                bbox=(335, 585, 135, 80),  # Cyan box - Distance: 0.0 km
                 metric_type='distance',
                 expected_format='number_with_unit'
             ),
             'calories': Region(
                 name='calories',
-                bbox=(274, 683, 165, 55),  # Magenta box - Calories: 0 kcal
+                bbox=(270, 680, 175, 60),  # Magenta box - Calories: 0 kcal
                 metric_type='calories',
                 expected_format='number_with_unit'
             ),
             'blood_oxygen': Region(
                 name='blood_oxygen',
-                bbox=(248, 897, 115, 75),  # Yellow box - Blood Oxygen: 97%
+                bbox=(245, 895, 125, 80),  # Yellow box - Blood Oxygen: 97%
                 metric_type='blood_oxygen',
                 expected_format='percentage'
             )
@@ -293,28 +293,71 @@ class ZeppLifeRegionDetector:
             return None
 
 def draw_debug_regions(image: np.ndarray, regions: Dict[str, Region], output_path: str = None) -> np.ndarray:
-    """Draw detected regions on image for debugging"""
+    """Draw enhanced region visualization with proper colors and spacing"""
     debug_image = image.copy()
     
+    # Create a semi-transparent overlay for better visualization
+    overlay = image.copy()
+    
+    # Enhanced colors matching your image requirements
     colors = {
-        'heart_rate': (0, 255, 0),    # Green
-        'stress': (255, 0, 0),        # Blue  
-        'steps': (0, 0, 255),         # Red
-        'distance': (255, 255, 0),    # Cyan
-        'calories': (255, 0, 255),    # Magenta
-        'blood_oxygen': (0, 255, 255) # Yellow
+        'heart_rate': (0, 255, 0),      # Bright Green 
+        'stress': (255, 100, 0),        # Blue
+        'steps': (0, 50, 255),          # Red
+        'distance': (255, 255, 0),      # Cyan
+        'calories': (255, 0, 255),      # Magenta  
+        'blood_oxygen': (0, 255, 255)   # Yellow
+    }
+    
+    # Labels for display
+    labels = {
+        'heart_rate': 'heart_rate',
+        'stress': 'stress', 
+        'steps': 'steps',
+        'distance': 'distance',
+        'calories': 'calories',
+        'blood_oxygen': 'blood_oxygen'
     }
     
     for name, region in regions.items():
         x, y, w, h = region.bbox
         color = colors.get(name, (128, 128, 128))
+        label = labels.get(name, name)
         
-        # Draw rectangle
+        # Draw filled rectangle with transparency
+        cv2.rectangle(overlay, (x, y), (x + w, y + h), color, -1)
+        
+        # Draw border rectangle
+        cv2.rectangle(debug_image, (x, y), (x + w, y + h), color, 3)
+        
+        # Add label with background
+        label_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)[0]
+        label_x = x
+        label_y = y - 15
+        
+        # Ensure label is within image bounds
+        if label_y < 20:
+            label_y = y + h + 25
+            
+        # Draw label background
+        cv2.rectangle(debug_image, 
+                     (label_x - 2, label_y - label_size[1] - 5), 
+                     (label_x + label_size[0] + 2, label_y + 5), 
+                     color, -1)
+        
+        # Draw label text
+        cv2.putText(debug_image, label, (label_x, label_y), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+    
+    # Blend the overlay with the original image for semi-transparency
+    alpha = 0.2  # Transparency factor
+    debug_image = cv2.addWeighted(overlay, alpha, debug_image, 1 - alpha, 0)
+    
+    # Add final border rectangles for clarity
+    for name, region in regions.items():
+        x, y, w, h = region.bbox
+        color = colors.get(name, (128, 128, 128))
         cv2.rectangle(debug_image, (x, y), (x + w, y + h), color, 2)
-        
-        # Add label
-        cv2.putText(debug_image, name, (x, y - 10), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
     
     if output_path:
         cv2.imwrite(output_path, debug_image)
