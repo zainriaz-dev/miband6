@@ -1,0 +1,65 @@
+# ============================================================================
+# ZEPP LIFE HEALTH METRICS EXTRACTOR - COMPREHENSIVE REQUIREMENTS
+# Enhanced version with automatic processing, batch operations, and monitoring
+# ============================================================================
+
+# CORE OCR ENGINE (REQUIRED)
+pytesseract>=0.3.10          # Primary OCR engine - requires Tesseract installation
+
+# IMAGE PROCESSING (REQUIRED)
+Pillow>=10.4.0               # Image loading, saving, and basic processing
+opencv-python>=4.10.0.84     # Advanced computer vision and image processing
+numpy>=1.26.0                # Numerical operations for image arrays
+
+# DATA PROCESSING AND OUTPUT (REQUIRED)
+pandas>=1.5.0                # CSV data handling and manipulation
+
+# ENHANCED CLI AND AUTOMATION (REQUIRED)
+watchdog>=3.0.0              # File system monitoring for continuous processing
+tqdm>=4.65.0                 # Progress bars for batch operations
+
+# SYSTEM MONITORING AND OPTIMIZATION (RECOMMENDED)
+psutil>=5.9.0                # System resource monitoring and hardware detection
+
+# CROSS-PLATFORM SCREENSHOT CAPTURE (OPTIONAL)
+mss>=7.0.1                   # Multi-platform screenshot capture (if needed)
+
+# ADVANCED OCR ENGINES (OPTIONAL - HIGHER ACCURACY)
+easyocr>=1.7.1               # Deep learning OCR (better for complex text)
+# paddleocr>=2.7.0.3         # Alternative deep learning OCR engine
+
+# IMAGE ENHANCEMENT (OPTIONAL - BETTER PREPROCESSING)
+scikit-image>=0.20.0         # Advanced image processing algorithms
+
+# GPU ACCELERATION (OPTIONAL - FOR PERFORMANCE)
+# torch>=2.0.0               # PyTorch for GPU-accelerated OCR engines
+# torchvision>=0.15.0        # Computer vision utilities for PyTorch
+# GPUtil>=1.4.0              # GPU detection and monitoring
+
+# DEVELOPMENT AND DEBUGGING (OPTIONAL)
+# matplotlib>=3.7.0          # Plotting and visualization for debugging
+# jupyter>=1.0.0             # Interactive notebooks for development
+
+# ============================================================================
+# INSTALLATION NOTES:
+# 
+# 1. TESSERACT OCR (REQUIRED):
+#    - Windows: Download from https://github.com/UB-Mannheim/tesseract/wiki
+#    - macOS: brew install tesseract
+#    - Ubuntu: sudo apt install tesseract-ocr
+#
+# 2. BASIC INSTALLATION:
+#    pip install -r requirements.txt
+#
+# 3. MINIMAL INSTALLATION (core features only):
+#    pip install pytesseract pillow opencv-python numpy pandas watchdog tqdm
+#
+# 4. FULL INSTALLATION (all features):
+#    pip install -r requirements.txt
+#    pip install torch torchvision  # For GPU acceleration
+#
+# 5. FOR GPU ACCELERATION:
+#    - Install CUDA toolkit if you have NVIDIA GPU
+#    - Install PyTorch with CUDA support
+#    - Uncomment torch and torchvision lines above
+# ============================================================================
